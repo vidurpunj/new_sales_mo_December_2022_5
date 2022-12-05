@@ -1,0 +1,7 @@
+{
+  "name": "new_sales_mo_December_2022",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}
