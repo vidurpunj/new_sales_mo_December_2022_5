@@ -1,0 +1,14 @@
+ion-content{
+  --background: red;
+  min-height: 100%;
+  .upper{
+    height: 100%;
+    width: 200px;
+    padding-top: 50px;
+  }
+  #login{
+    text-align: center;
+    color: #ffffff;
+    font-size: 28px;
+  }
+}

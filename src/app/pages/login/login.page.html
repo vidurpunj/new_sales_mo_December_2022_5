@@ -1,0 +1,31 @@
+<ion-content>
+  <h1 class="ion-text-center">Sales<span>MO</span></h1>
+  <div class="userForm">
+    <form [formGroup]="user" (ngSubmit)="login(user)" novalidate>
+      <ion-item>
+        <ion-label>
+          <ion-icon name="mail"></ion-icon>
+        </ion-label>
+        <ion-input type="number" formControlName="username" spellcheck="false" placeholder="Email ID/Phone Number"
+                   autocapitalize="off"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label>
+          <ion-icon name="lock-closed"></ion-icon>
+        </ion-label>
+        <ion-input type="password" formControlName="password" placeholder="Password"></ion-input>
+      </ion-item>
+      <div *ngIf="username?.errors && username?.touched && username?.invalid">
+        <div *ngIf="username?.errors?.['required']">Phone number is required</div>
+      </div>
+      <div *ngIf="password?.errors && password?.touched && password?.invalid">
+        <div *ngIf="password?.errors?.['required']">Password is required</div>
+      </div>
+      <ion-button expand="block" class="submitbutton" color="dark" type="submit" [disabled]="user.invalid">Login
+      </ion-button>
+    </form>
+    <ion-button clear expand="block" color="dark" class="lightBtn" (click)="forgotPassword()">
+      Forgot password?
+    </ion-button>
+  </div>
+</ion-content>
