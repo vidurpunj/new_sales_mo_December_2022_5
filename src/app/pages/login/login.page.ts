@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, NgZone, OnInit} from '@angular/core';
 import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import {AlertController, LoadingController, MenuController, NavController, Platform} from "@ionic/angular";
 import {UpdateValidatorService} from "../../services/update-validator/update-validator.service";
@@ -7,8 +7,9 @@ import {LoginResponseStatus} from "../utils/LogicResponseStatus";
 import {ApiService} from "../../services/api/api.service";
 import {SharedDataService} from "../../services/shared-data/shared-data.service";
 import {Storage} from "@ionic/storage";
-import { Subscription } from "rxjs";
-import { Network } from '@ionic-native/network/ngx';
+import {Network} from '@capacitor/network';
+import {PluginListenerHandle} from "@capacitor/core";
+
 @Component({
   selector: 'app-login',
   templateUrl: './login.page.html',
@@ -18,9 +19,11 @@ export class LoginPage implements OnInit {
   deviceId: string = "";
   deviceInfoObj: any = {};
 
-  private connected: Subscription[] = [];
-  private disconnected: Subscription[] = [];
+
   networkType: any;
+  networkListner: PluginListenerHandle | undefined;
+  connected: boolean | undefined;
+  connectionType: string  = 'none';
 
   constructor(public formBuilder: FormBuilder,
               private loadingCtrl: LoadingController,
@@ -28,11 +31,9 @@ export class LoginPage implements OnInit {
               private apiProvider: ApiService,
               private sharedData: SharedDataService,
               private storage: Storage,
-              private network: Network
+              private ngZone: NgZone
   ) {
-    this.checkNetwork();
   }
-
 
 
   user = this.formBuilder.group({
@@ -138,7 +139,8 @@ export class LoginPage implements OnInit {
     })
   }
 
-  ngOnInit() {
+  async ngOnInit() {
+    // execute first time on page load
     // create empty storage
     this.storage.create();
     // On initialization populate device id
@@ -147,14 +149,21 @@ export class LoginPage implements OnInit {
       console.log("user deviceId:", deviceId);
       window.localStorage.setItem('device_id', deviceId);
     })
+
+    this.networkListner = await Network.addListener('networkStatusChange', status => {
+      console.log('Network status changed', status);
+      this.ngZone.run(()=>{
+        this.changeStatus(status);
+      })
+    });
+
+    const status = await Network.getStatus();
+    this.changeStatus(status);
   }
 
-  checkNetwork() {
-    this.connected = this.network.onConnect().subscribe(data => {
-      this.networkType = data.type;
-    }, error => console.error(error));
-    this.disconnected = this.network.onDisconnect().subscribe(data => {
-      this.networkType = data.type;
-    }, error => console.error(error));
+  changeStatus(status) {
+    this.connected = status?.connected;
+    this.connectionType = status?.connectionType;
   }
+
 }

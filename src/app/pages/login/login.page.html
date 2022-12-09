@@ -1,4 +1,8 @@
 <ion-content>
+  <div class="ion-margin">You are
+    <ion-text *ngIf="connected === true" color="white">Online</ion-text>
+    <ion-text *ngIf="connected === false" color="dark">Offline</ion-text>
+  </div>
   <h1 class="ion-text-center">Sales<span>MO</span></h1>
   <div class="userForm">
     <form [formGroup]="user" (ngSubmit)="login(user)" novalidate>

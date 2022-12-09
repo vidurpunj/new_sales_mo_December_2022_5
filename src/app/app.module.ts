@@ -8,12 +8,12 @@ import { Storage } from "@ionic/storage";
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
-import { Network } from '@ionic-native/network/ngx';
+
 
 @NgModule({
   declarations: [AppComponent],
   imports: [BrowserModule, HttpClientModule, IonicModule.forRoot(), AppRoutingModule],
-  providers: [HttpClient, Storage, Network, { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }],
+  providers: [HttpClient, Storage, { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }],
   bootstrap: [AppComponent],
 })
 export class AppModule {}
