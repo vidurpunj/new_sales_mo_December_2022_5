@@ -415,16 +415,17 @@ export class LoginPage implements OnInit, OnDestroy {
 
             console.log("Redirect to otp page ====>>>>")
 
-            // let navigationExtras: NavigationExtras = {
-            //   state: {
-            //     page: "DeviceRegistrationPage",
-            //     transactionId: response.data.TransactionId,
-            //     deviceInfoObj: this.deviceInfoObj,
-            //     loginInfo: this.loginInfoParams
-            //   }
-            // };
+            let navigationExtras: NavigationExtras = {
+              state: {
+                page: "DeviceRegistrationPage",
+                transactionId: response.data.TransactionId,
+                deviceInfoObj: this.deviceInfoObj,
+                loginInfo: this.loginInfoParams
+              }
+            };
 
-            this.navCtrl.navigateForward('otp');
+            console.log("Send arguments");
+            this.navCtrl.navigateForward(['otp'], {queryParams: navigationExtras});
 
             // this.updatevalidator.showToast("OTP Sent");
             loader.dismiss();
