@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {LoadingController} from "@ionic/angular";
+import {AlertController, LoadingController, MenuController, NavController} from "@ionic/angular";
 import {SharedDataService} from "../../services/shared-data/shared-data.service";
 import {Observable} from "rxjs";
 import {ApiService} from "../../services/api/api.service";
@@ -8,47 +8,72 @@ import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {Network} from "@capacitor/network";
 import {Storage} from '@ionic/storage';
 import {ActivatedRoute} from "@angular/router"; // This line added manually.
+import { OtpBasePage } from "./otp-base";
 
 @Component({
   selector: 'app-otp',
   templateUrl: './otp.page.html',
   styleUrls: ['./otp.page.scss'],
 })
-export class OtpPage implements OnInit {
+export class OtpPage extends OtpBasePage {
   userOtp: FormGroup | undefined;
   regenerateOtpParameters: any;
   userMobileNumber: number | undefined;
   regenerateOtpServiceCall: Observable<any> | undefined;
   transactionId: number | undefined;
+  deviceInfoObj: any;
+  page : any;
   networkType: any;
   otp: string = "";
-  connected: boolean = false;
-  connectionType: string = "";
+  config = {
+    allowPasswordOnly: false, // this is false by default
+    allowNumbersOnly: true, // this is false by default
+    length: 6 ,// the default is 4
+    inputStyles: {
+      width: '35px',
+      height: '40px'
+    },
+  };
+
+  override connected: boolean = false;
+  override connectionType: string = "";
   OtpValue: any = null;
   newPassword: any;
   isOtp: boolean = false;
   loginInfo: any = {};
-
   constructor(
-    public sharedData: SharedDataService,
-    public loadingCtrl: LoadingController,
-    public apiProvider: ApiService,
-    public updatevalidator: UpdateValidatorService,
-    public storage: Storage,
-    private route: ActivatedRoute
+    public override sharedData: SharedDataService,
+    public override loadingCtrl: LoadingController,
+    public override apiProvider: ApiService,
+    public override updatevalidator: UpdateValidatorService,
+    public override storage: Storage,
+    private route: ActivatedRoute,
+    public override menu: MenuController,
+    public override alertCtrl: AlertController,
+    public override navCtrl: NavController
   ) {
+
+
+    super(sharedData, loadingCtrl,apiProvider, updatevalidator, storage, alertCtrl , menu, navCtrl)
+
+    // check if network connection is correct
+    const status = Network.getStatus();
+    this.changeStatus(status);
     storage.get('page').then((parameter) => {
-      console.log('Received page Parameter: ' + parameter);
+      console.log('Received page Parameter: ====>>>>' + parameter);
+      this.page = parameter;
     });
     storage.get('transactionId').then((parameter) => {
-      console.log('Received transactionId Parameter: ' + parameter);
+      console.log('Received transactionId Parameter: ====>>>>' + parameter);
       this.transactionId = parameter;
     });
     storage.get('deviceInfoObj').then((parameter) => {
-      console.log('Received deviceInfoObj Parameter: ' + JSON.stringify(parameter));
+      console.log('Received deviceInfoObj Parameter: ====>>>>' + JSON.stringify(parameter));
+      this.deviceInfoObj = parameter
     });
     storage.get('loginInfo').then((parameter) => {
-      console.log('Received loginInfo Parameter: ' + JSON.stringify(parameter));
+      console.log('Received loginInfo Parameter: ====>>>>' + JSON.stringify(parameter));
+      this.loginInfo = parameter
     });
   }
 
@@ -61,12 +86,9 @@ export class OtpPage implements OnInit {
       otp5: new FormControl('', [Validators.required, Validators.minLength(1), Validators.maxLength(1), Validators.pattern('^[0-9]$')]),
       otp6: new FormControl('', [Validators.required, Validators.minLength(1), Validators.maxLength(1), Validators.pattern('^[0-9]$')])
     });
-
-    const status = await Network.getStatus();
-    this.changeStatus(status);
   }
 
-  changeStatus(status) {
+  override changeStatus(status) {
     this.connected = status?.connected;
     this.connectionType = status?.connectionType;
   }
@@ -244,7 +266,7 @@ export class OtpPage implements OnInit {
         user_id: this.sharedData.getUserId(),
         app_id: this.sharedData.getAppId(),
         otpInfo: {transactionId: this.transactionId, otp: this.OtpValue},
-        // deviceInfo: this.navParams.get('deviceInfoObj') ====>>>> commented
+        deviceInfo: this.deviceInfoObj
       }
       console.log("completeRegistrationParameters", completeRegistrationParameters);
       let loader = await this.loadingCtrl.create({
@@ -258,14 +280,14 @@ export class OtpPage implements OnInit {
           console.log("Now observe ====>>>>")
           console.log(response);
           if (response.status == 1) {
-           debugger;
+            console.log("Devise is now registered  ====>>>>");
             window.localStorage.setItem('device_id', response.data.deviceId);
             //Add new device id to storage
             this.storage.set('user_device_id', response.data.deviceviceId); // ====>>>> commented
             // this.finalLogin();
             // this.navCtrl.setRoot('LoginPage');
-            // this.login(this.loginInfo)  // ====>>>> commented
-            // this.updatevalidator.showToast("Device Registered Successfully!"); // ====>>>> commented
+            this.login(this.loginInfo)  // ====>>>> commented
+            this.updatevalidator.showToast("Device Registered Successfully!"); // ====>>>> commented
             loader.dismiss();
           } else {
             this.updatevalidator.showAlert("Response Failure", response.errorMsg);

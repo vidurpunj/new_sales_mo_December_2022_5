@@ -15,8 +15,8 @@
     <ion-card-content class="card-content">
       <table text-center class="table">
         <tr class="otpRow">
-<!--          <ng-otp-input  #ngOtpInput (onInputChange)="onOtpChange($event)" [config]="config"></ng-otp-input>-->
-          <ng-otp-input  (onInputChange)="onOtpChange($event)"  [config]="{length:6}"></ng-otp-input>
+          <ng-otp-input  #ngOtpInput (onInputChange)="onOtpChange($event)" [config]="config"></ng-otp-input>
+<!--          <ng-otp-input  (onInputChange)="onOtpChange($event)"  [config]="{length:6}"></ng-otp-input>-->
           <ion-text>otp is {{otp}}</ion-text>
         </tr>
       </table>

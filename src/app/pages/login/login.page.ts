@@ -438,13 +438,26 @@ export class LoginPage implements OnInit, OnDestroy {
     console.log(" loader end  ====>>>>")
   }
 
-  async getDeviceInformation() {
-    let deviceInfo = await Device.getInfo();
+  getDeviceInformation() {
+    let deviceInfo = Device.getInfo();
     console.log("DeviceInfo -> ", deviceInfo);
-    await this.detectDeviceType();
-    await this.detectDeviceOs(deviceInfo);
+    this.detectDeviceType();
+    this.detectDeviceOs(deviceInfo);
     console.log("GetDeviceInformation complete ====>>")
     // returns if the app is running on a Desktop browser.
+  }
+
+
+
+  detectDeviceOs(deviceInfo) {
+    if (deviceInfo.operatingSystem === "android")
+      this.deviceInfoObj.device_os = "A";
+    else if (deviceInfo.operatingSystem === "windows" || deviceInfo.operatingSystem === "unknown")
+      this.deviceInfoObj.device_os = "W";
+    else if (deviceInfo.operatingSystem === "mac")
+      this.deviceInfoObj.device_os = "I";
+    else
+      this.deviceInfoObj.device_os = "A";
   }
 
   detectDeviceType() {
@@ -456,17 +469,6 @@ export class LoginPage implements OnInit, OnDestroy {
       this.deviceInfoObj.device_type = "T";
     else
       this.deviceInfoObj.device_type = "L";   //Laptop
-  }
-
-  detectDeviceOs(deviceInfo) {
-    if (deviceInfo.operatingSystem === "android")
-      this.deviceInfoObj.device_os = "A";
-    else if (deviceInfo.operatingSystem === "windows")
-      this.deviceInfoObj.device_os = "W";
-    else if (deviceInfo.operatingSystem === "mac")
-      this.deviceInfoObj.device_os = "I";
-    else
-      this.deviceInfoObj.device_os = "A";
   }
 
   testtingCredentials() {
