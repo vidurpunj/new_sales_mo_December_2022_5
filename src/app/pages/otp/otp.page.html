@@ -16,11 +16,11 @@
       <table text-center class="table">
         <tr class="otpRow">
 <!--          <ng-otp-input  #ngOtpInput (onInputChange)="onOtpChange($event)" [config]="config"></ng-otp-input>-->
-          <ng-otp-input  (onInputChange)="onOtpChange($event)"  [config]="{length:5}"></ng-otp-input>
+          <ng-otp-input  (onInputChange)="onOtpChange($event)"  [config]="{length:6}"></ng-otp-input>
           <ion-text>otp is {{otp}}</ion-text>
         </tr>
       </table>
-<!--      <button ion-button full class="submitbutton" color="dark" (click)="verifyOtpServiceCall(userOtp)" [disabled]="!isOtp">Verify</button>-->
+      <button ion-button full class="submitbutton" color="dark" (click)="verifyOtpServiceCall(OtpValue)" [disabled]="!isOtp">Verify</button>
     </ion-card-content>
   </ion-card>
   <button ion-button clear block color="dark" (click)="resendOTPServiceCall()">Resend OTP?</button>

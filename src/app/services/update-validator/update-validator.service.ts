@@ -13,7 +13,8 @@ export class UpdateValidatorService {
   constructor(
     public alertCtrl: AlertController,
     private apiProvider: ApiService,
-    private sharedData: SharedDataService
+    private sharedData: SharedDataService,
+    private toast: ToastController
   ) {
   }
 
@@ -29,7 +30,13 @@ export class UpdateValidatorService {
     });
     // alert.present();
   }
-
+  async showToast(connectionState) {
+    let toastIcon = await this.toast.create({
+      message: `${connectionState}`,
+      duration: 1500
+    })
+    toastIcon.present();
+  }
   validatePermissions(permissionList: string[]): Observable<Map<string, boolean>> {
     let result: Subject<Map<string, boolean>> = new Subject<Map<string, boolean>>();
     let resultMap: Map<string, boolean> = new Map<string, boolean>();

@@ -45,7 +45,7 @@ export class LoginPage implements OnInit, OnDestroy {
               public menu: MenuController,
               public navCtrl: NavController,
               public platform: Platform,
-              private toast: ToastController
+              private toast: ToastController,
   ) {
   }
 
@@ -105,8 +105,8 @@ export class LoginPage implements OnInit, OnDestroy {
         loader_response.present().then(() => {
           let loginServiceCall: Observable<any> = this.apiProvider.postSimsAuthService('authenticate', loginParameters, 'POST');
           loginServiceCall.subscribe(response => {
-            console.log("inside loginServiceCall");
-            console.log(response);
+            console.log("Inside the subscribe block  ====>>>>")
+            console.log("inside loginServiceCall ====>>>>");
             if (response.status == 1) {
               console.log("Login Response Data =" + JSON.stringify(response));
               let status: LoginResponseStatus = response.data.status as LoginResponseStatus;
@@ -122,6 +122,7 @@ export class LoginPage implements OnInit, OnDestroy {
               loader_response.dismiss();
             }
           }, (err) => {
+            console.log("Show error", err);
             this.updatevalidator.showAlert("Server Error", "Please try again!!");
             loader_response.dismiss();
           })
@@ -264,6 +265,7 @@ export class LoginPage implements OnInit, OnDestroy {
           handler: () => {
             console.log('Yes clicked');
             this.requestForDeviceRegistration();
+            console.log('calling done requestForDeviceRegistration');
           }
         }
       ]
@@ -371,18 +373,19 @@ export class LoginPage implements OnInit, OnDestroy {
   }
 
   async requestForDeviceRegistration() {
+    console.log("inside requestForDeviceRegistration ====>>>>")
     let registrationRequestParameters = {
       'appId': this.sharedData.getAppId(),
       'userId': this.sharedData.getUserId(),
       'registerMobNo': window.localStorage.getItem('user_phone'),
       'otpChannel': ["SMS"]
     }
-
     let loader = await this.loadingCtrl.create({
       cssClass: 'activity-detail-loading',
       spinner: "dots"
     });
-    loader.present().then(() => {
+    loader.present();
+      console.log("Inside loader ====>>>>")
       let registrationRequestServiceCall: Observable<any> = this.apiProvider.postSimsAuthService('requestForDeviceRegister', registrationRequestParameters, 'POST');
       registrationRequestServiceCall.subscribe(async response => {
         console.log("Showing loader again")
@@ -401,7 +404,7 @@ export class LoginPage implements OnInit, OnDestroy {
             //   deviceInfoObj: this.deviceInfoObj,
             //   loginInfo: this.loginInfoParams
             // });
-            // this.updatevalidator.showToast("OTP Sent");
+            this.updatevalidator.showToast("OTP Sent");
             loader.dismiss();
             // }).catch(err => {
             // this.updatevalidator.showToast(err);
@@ -415,19 +418,13 @@ export class LoginPage implements OnInit, OnDestroy {
 
             console.log("Redirect to otp page ====>>>>")
 
-            let navigationExtras: NavigationExtras = {
-              state: {
-                page: "DeviceRegistrationPage",
-                transactionId: response.data.TransactionId,
-                deviceInfoObj: this.deviceInfoObj,
-                loginInfo: this.loginInfoParams
-              }
-            };
-
             console.log("Send arguments");
-            this.navCtrl.navigateForward(['otp'], {queryParams: navigationExtras});
-
-            // this.updatevalidator.showToast("OTP Sent");
+            await this.storage.set('page', "DeviceRegistrationPage");
+            await this.storage.set('transactionId', response.data.TransactionId);
+            await this.storage.set('deviceInfoObj', this.deviceInfoObj);
+            await this.storage.set('loginInfo', this.loginInfoParams.value);
+            await this.navCtrl.navigateForward(['/otp']);
+            console.log("Redirect to the otp page ====>>>> ")
             loader.dismiss();
           }
         } else {
@@ -438,7 +435,7 @@ export class LoginPage implements OnInit, OnDestroy {
         this.updatevalidator.showAlert("Server Error", "Please try again! " + JSON.stringify(err));
         loader.dismiss();
       });
-    });
+    console.log(" loader end  ====>>>>")
   }
 
   async getDeviceInformation() {
@@ -509,7 +506,7 @@ export class LoginPage implements OnInit, OnDestroy {
   async ngOnInit() {
     // execute first time on page load
     // create empty storage
-    this.storage.create();
+    await this.storage.create();
     // On initialization populate device id
     this.storage.get('user_device_id').then((deviceId) => {
       this.deviceId = deviceId;

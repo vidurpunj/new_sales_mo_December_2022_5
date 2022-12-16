@@ -54,13 +54,17 @@ export class ApiService {
   }
 
   putAuthService(endpoint: string, body: any, reqOpts?: any) {
+    console.log("Inside ====>>>> putAuthService")
     console.log("Request URL: " + this.urlService + "/" + endpoint);
+    console.log('body ====>>>>' + body);
     // return this.http.put(this.urlService + '/' + endpoint, body, reqOpts);
     return this.http.put(this.urlService + '/' + endpoint, body, { "responseType": "json" });
   }
 
   postSimsAuthService(endpoint: string, body: any, reqOpts?: any) {
+    console.log("Inside ====>>>> postSimsAuthService");
     console.log("Request Auth URL: " + this.simsAuthServiceUrl + "/" + endpoint);
+    console.log("body =====>>>>", body)
     return this.http.post(this.simsAuthServiceUrl + '/' + endpoint, body, { "responseType": "json" });
   }
 
