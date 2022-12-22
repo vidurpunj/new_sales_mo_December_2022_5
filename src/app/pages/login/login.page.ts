@@ -18,6 +18,7 @@ import {Network} from '@capacitor/network';
 import {PluginListenerHandle} from "@capacitor/core";
 import {Device} from '@capacitor/device';
 import {NavigationExtras} from "@angular/router";
+import {PermissionConstants} from "../permission/PermissionConstants";
 
 @Component({
   selector: 'app-login',
@@ -294,13 +295,96 @@ export class LoginPage implements OnInit, OnDestroy {
         console.log("this.deviceId -> ", this.deviceId);
         console.log("vidur comment")
         this.getUserImage();
-        // this.navigateAsPerPermission();
+        this.navigateAsPerPermission();
       } else
         this.updatevalidator.showAlert('Warning', 'You have already logged in from another device!');
     }, () => {
       this.updatevalidator.showAlert("Error", "Php Authentication server error");
       return;
     })
+  }
+
+  // Navigate user according to the permissions
+  async navigateAsPerPermission() {
+    console.log("inside navigateAsPerPermission and set the root ====>>>>")
+    // this.navCtrl.push('ChooseLoginAsPage');
+    let loader = await this.loadingCtrl.create({
+      cssClass: 'activity-detail-loading',
+      spinner: "dots"
+    });
+    loader.present().then(() => {
+      this.checkAdminAccessPermission().then(permissions => {
+        console.log("permissions in navigateAsPerPermission: ", JSON.stringify(permissions));
+        // console.log("admin permission in ionViewWillEnter: ", JSON.stringify(permissions)['adminPermission']);
+        // console.log("admin permission in ionViewWillEnter: ", permissions['adminPermission']);
+
+        // @ts-ignore
+        if (permissions['adminPermission'] === true && permissions['employeePermission'] === false) {
+          console.log("First If in navigateAsPerPermission");
+          window.localStorage.setItem('user_Role', "ADMIN");
+          window.localStorage.setItem('IsPermissionBoth', "false");
+          this.navCtrl.navigateRoot('AdminDashboardPage');
+          // this.updatevalidator.showToast("Login Successful, Welcome " + window.localStorage.getItem('user_name'));
+          // @ts-ignore
+        } else if (permissions['adminPermission'] === false && permissions['employeePermission'] === true) {
+          console.log("Second If in navigateAsPerPermission");
+          window.localStorage.setItem('user_Role', "EMPLOYEE");
+          window.localStorage.setItem('IsPermissionBoth', "false");
+          this.navCtrl.navigateRoot('HomePage');
+          // this.updatevalidator.showToast("Login Successful, Welcome " + window.localStorage.getItem('user_name'));
+        }
+        //If User has neither admin nor employee permissions
+        // @ts-ignore
+        else if (permissions['adminPermission'] === false && permissions['employeePermission'] === false) {
+          this.updatevalidator.showAlert("Message", "You dont have permissions to access the app!");
+          window.localStorage.setItem('IsPermissionBoth', "false");
+          this.logout();
+        }
+        //If User has both admin and employee permissions
+        else {
+          // this.updatevalidator.showAlert("Alert!", "You have ADMIN Access Permission as well");
+          window.localStorage.setItem('IsPermissionBoth', "true");
+          this.navCtrl.navigateForward('ChooseLoginAsPage');
+        }
+        loader.dismiss();
+      }, () => {
+        this.updatevalidator.showAlert("Error", "ADMIN access check failed!");
+        loader.dismiss();
+        return;
+      });
+    });
+    // loader.dismiss();
+  }
+  checkAdminAccessPermission() {
+    console.log("Inside checkAdminAccessPermission ====>>>>")
+    console.log(">> checking admin access permission after login >>");
+    let promise = new Promise((resolve, reject) => {
+      this.updatevalidator.validatePermissions(PermissionConstants.admin_access_permissions).subscribe(result => {
+        console.log("checkAdminAccessPermission() response -> ", result);
+        let adminPermission: boolean | undefined = false;
+        let employeePermission: boolean | undefined = false;
+        if (result != undefined && result.size > 0) {
+          PermissionConstants.admin_access_permissions.forEach(value => {
+            switch (value) {
+              case "es.app.admin.access":
+                adminPermission = result.get(value);
+                console.log("check Admin Access Permission:", adminPermission);
+                // resolve(permissions);
+                break;
+
+              case "es.app.employee.access":
+                employeePermission = result.get(value);
+                console.log("check Employee Access Permission:", employeePermission);
+                break;
+            }
+          });
+          resolve({ 'adminPermission': adminPermission, 'employeePermission': employeePermission });
+        }
+        else
+          reject();
+      });
+    });
+    return promise;
   }
 
 // ===============================>>>>
