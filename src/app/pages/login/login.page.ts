@@ -67,6 +67,7 @@ export class LoginPage implements OnInit, OnDestroy {
 
   forgotPassword() {
     console.log("Forget password")
+    this.navCtrl.navigateRoot('forget-password');
   }
 
   loginInfoParams: any = {};
