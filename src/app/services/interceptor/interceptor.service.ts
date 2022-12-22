@@ -23,7 +23,6 @@ export class InterceptorService implements HttpInterceptor {
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     console.log("----------------Start RequestResponse Interceptor ---------------");
     console.log('current request without headers ->', request);
-
     // if(!request.url.endsWith("login") && !request.url.endsWith("logout") && !request.url.endsWith("forgotPassword")
     //   && !request.url.endsWith("sendOtp") && !request.url.endsWith("otpValidation"))
     if (!request.url.endsWith("authenticate") && !request.url.endsWith("logout") && !request.urlWithParams.endsWith("validatePermissions")
@@ -32,16 +31,18 @@ export class InterceptorService implements HttpInterceptor {
       && !request.url.endsWith("changeOrResetPassword") && !request.url.endsWith("validateUserAndPassword")
       && !request.url.endsWith("generateToken") && !request.url.endsWith("deleteToken")) {
       console.log("----------------Inside RequestResponse Interceptor---------------");
-      // @ts-ignore
-      // @ts-ignore
-      // @ts-ignore
+
       const headers = new HttpHeaders({
         // "Content-Type":"application/json",
         // "responseType": "json",
-        "emp_id": `window.localStorage.getItem('userid')`,
-        "org_id": `window.localStorage.getItem('org_id')`,
-        "token": `window.localStorage.getItem('token')`,
-        "device_id": `window.localStorage.getItem('device_id')`
+        // @ts-ignore
+        "emp_id": window.localStorage.getItem('userid'),
+        // @ts-ignore
+        "org_id": window.localStorage.getItem('org_id'),
+        // @ts-ignore
+        "token": window.localStorage.getItem('token'),
+        // @ts-ignore
+        "device_id": window.localStorage.getItem('device_id')
       });
       request = request.clone({headers});
       console.log('new request with headers ->', request);

@@ -47,6 +47,7 @@ export class LoginPage implements OnInit, OnDestroy {
               public platform: Platform,
               private toast: ToastController,
   ) {
+    console.log("Constructor login page ....")
   }
 
 
@@ -318,15 +319,13 @@ export class LoginPage implements OnInit, OnDestroy {
         let userImageServiceSuccess: Observable<any> = this.apiProvider.getAuthService('orgInfoApi/orgCommonSetting/' + window.localStorage.getItem('org_id') + '/' + window.localStorage.getItem('userid'), 'GET')
         userImageServiceSuccess.subscribe(result => {
           console.log("userImageData:" + JSON.stringify(result));
-          debugger;
           if (result.status == 1) {
             window.localStorage.setItem('user_Profile_Pic', result.data.user_img);
-            // make it again by using rxjs
-            // this.events.publish('user:created', '');
+            console.log("====>>>> user_Profile_Pic =====>>>>")
+            // Event.publish('user:created', '');
             loader.dismiss()
           } else {
-            // what this show toast function is doing
-            // this.updatevalidator.showToast(result.message.message)
+            this.updatevalidator.showToast(result.message.message)
             loader.dismiss()
           }
         }, (err) => {
@@ -513,6 +512,7 @@ export class LoginPage implements OnInit, OnDestroy {
     this.storage.get('user_device_id').then((deviceId) => {
       this.deviceId = deviceId;
       console.log("user deviceId:", deviceId);
+      console.log("user deviceId-----------------:", deviceId);
       window.localStorage.setItem('device_id', deviceId);
     })
 

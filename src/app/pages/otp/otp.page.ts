@@ -283,7 +283,7 @@ export class OtpPage extends OtpBasePage {
             console.log("Devise is now registered  ====>>>>");
             window.localStorage.setItem('device_id', response.data.deviceId);
             //Add new device id to storage
-            this.storage.set('user_device_id', response.data.deviceviceId); // ====>>>> commented
+            this.storage.set('user_device_id', response.data.deviceId); // ====>>>> commented
             // this.finalLogin();
             // this.navCtrl.setRoot('LoginPage');
             this.login(this.loginInfo)  // ====>>>> commented
