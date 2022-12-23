@@ -39,6 +39,8 @@ export class OtpPage extends OtpBasePage {
   override connectionType: string = "";
   OtpValue: any = null;
   newPassword: any;
+  mobileNumber: any;
+  confirmPassword: any;
   isOtp: boolean = false;
   loginInfo: any = {};
   constructor(
@@ -75,6 +77,20 @@ export class OtpPage extends OtpBasePage {
       console.log('Received loginInfo Parameter: ====>>>>' + JSON.stringify(parameter));
       this.loginInfo = parameter
     });
+
+    storage.get('mobileNumber').then((parameter)=>{
+      this.mobileNumber = parameter;
+      this.userMobileNumber = parameter;
+    })
+
+    storage.get('newpassword').then((parameter)=>{
+      this.newPassword = parameter;
+    })
+
+    storage.get('confirmPassword').then((parameter)=>{
+      this.confirmPassword = parameter;
+    })
+
   }
 
   async ngOnInit() {
@@ -223,6 +239,7 @@ export class OtpPage extends OtpBasePage {
       // this.updatevalidator.showToast("Please enter 6 digit OTP number!!"); //====>>>> commented
       return;
     }
+    console.log("inside verifyOtpForResettingPassword ......")
     let verifyOtpForResettingPasswordParameters = {
       "userId": "",
       "appId": this.sharedData.getAppId(),
@@ -301,7 +318,7 @@ export class OtpPage extends OtpBasePage {
   }
 
   resetPassword() {
-
+    console.log("Inside reset password function ....");
     let resetPasswordParameters = {
       user_id: null,
       loginUserName: this.userMobileNumber,
@@ -316,7 +333,7 @@ export class OtpPage extends OtpBasePage {
       console.log("resetPasswordServiceCall response -> ", JSON.stringify(response));
       if (response.status == 1) {
         this.updatevalidator.showAlert("Success", "Your Password has been reset successfully");
-        // this.navCtrl.setRoot('LoginPage');  // ====>>>> commented
+        this.navCtrl.navigateRoot('login');  // ====>>>> commented
       } else
         this.updatevalidator.showAlert("Message", response.errorMsg);
     }, err => {
