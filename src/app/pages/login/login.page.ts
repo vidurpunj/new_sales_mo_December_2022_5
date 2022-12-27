@@ -47,6 +47,7 @@ export class LoginPage implements OnInit, OnDestroy {
               public navCtrl: NavController,
               public platform: Platform,
               private toast: ToastController,
+
   ) {
     console.log("Constructor login page ....")
   }
@@ -408,6 +409,7 @@ export class LoginPage implements OnInit, OnDestroy {
             window.localStorage.setItem('user_Profile_Pic', result.data.user_img);
             console.log("====>>>> user_Profile_Pic =====>>>>")
             // Event.publish('user:created', '');
+            // this.sharedData.publishUserData({'user:created': ''});
             loader.dismiss()
           } else {
             this.updatevalidator.showToast(result.message.message)
@@ -448,6 +450,10 @@ export class LoginPage implements OnInit, OnDestroy {
     this.menu.close();
     // vidur commented
     // this.events.unsubscribe('user:created', () => {
+    // });
+    // Get data from
+    // this.globalFooService.getObservable().subscribe((data) => {
+    //   console.log('Data received', data);
     // });
     // Need to set the root url from routing
     // this.navCtrl.setRoot('LoginPage');

@@ -58,4 +58,47 @@ export class UpdateValidatorService {
     });
     return result;
   }
+
+  getDateFormat(dateVal) {
+    var d = new Date(dateVal),
+      month = '' + (d.getMonth() + 1),
+      day = '' + d.getDate(),
+      year = d.getFullYear();
+
+    if (month.length < 2) month = '0' + month;
+    if (day.length < 2) day = '0' + day;
+
+    return [day, month, year].join('-');
+  }
+  getAltDateFormat(dateVal) {
+    var d = new Date(dateVal),
+      month = '' + (d.getMonth() + 1),
+      day = '' + d.getDate(),
+      year = d.getFullYear();
+
+    if (month.length < 2) month = '0' + month;
+    if (day.length < 2) day = '0' + day;
+
+    return [year, month, day].join('-');
+  }
+  getTimeFormat(time) {
+    var timeString = time;
+    var H = +timeString.substr(0, 2);
+    var h = H % 12 || 12;
+    var ampm = (H < 12 || H === 24) ? " AM" : " PM";
+    timeString = h + timeString.substr(2, 6) + ampm;
+    return timeString;
+  }
+  getMonthDateFormat(dateVal) {
+    var current_datetime = new Date(dateVal)
+    const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+    let formatted_date = current_datetime.getDate() + " " + months[current_datetime.getMonth()] + " " + current_datetime.getFullYear()
+    return formatted_date;
+  }
+  getFullMonthDateFormat(dateVal) {
+    var current_datetime = new Date(dateVal)
+    const months = ["January ", "February", "March ", "April ", "May", "June", "July", "August", "September", "October", "November", "December"];
+    let formatted_date = months[current_datetime.getMonth()] + " " + current_datetime.getDate() + ", " + current_datetime.getFullYear()
+    return formatted_date;
+  }
 }
