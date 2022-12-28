@@ -188,7 +188,7 @@ export class HomePage implements OnInit {
   }
 
   goToAttendance() {
-    this.navCtrl.navigateForward('AttendancePage');
+    this.navCtrl.navigateForward('attendance');
   }
 
   changeStatus(status) {

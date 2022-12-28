@@ -14,21 +14,20 @@ export class UpdateValidatorService {
     public alertCtrl: AlertController,
     private apiProvider: ApiService,
     private sharedData: SharedDataService,
-    private toast: ToastController
+    private toast: ToastController,
+    // private locationAccuracy: LocationAccuracy
   ) {
   }
 
-  showAlert(title, message) {
-    let alert = this.alertCtrl.create({
+  async showAlert(title, message) {
+    let alert = await this.alertCtrl.create({
       header: 'title',
       // subTitle: message,
       message: message,
       buttons: [{text: 'ok'}],
       backdropDismiss: false
-    }).then((response) => {
-      response.present();
-    });
-    // alert.present();
+    })
+    alert.present();
   }
   async showToast(connectionState) {
     let toastIcon = await this.toast.create({
@@ -100,5 +99,38 @@ export class UpdateValidatorService {
     const months = ["January ", "February", "March ", "April ", "May", "June", "July", "August", "September", "October", "November", "December"];
     let formatted_date = months[current_datetime.getMonth()] + " " + current_datetime.getDate() + ", " + current_datetime.getFullYear()
     return formatted_date;
+  }
+
+  getCurrent_Time() {
+    let displaytime: any = new Date().toLocaleTimeString();
+
+    return displaytime
+  }
+
+  getCurrentDate() {
+    var d = new Date(),
+      month = '' + (d.getMonth() + 1),
+      day = '' + d.getDate(),
+      year = d.getFullYear();
+
+    if (month.length < 2) month = '0' + month;
+    if (day.length < 2) day = '0' + day;
+
+    return [day, month, year].join('-');
+  }
+  getOpenLocationservice() {
+    // this.locationAccuracy.canRequest().then((canRequest: boolean) => {
+    //   if (canRequest) {
+    //     // the accuracy option will be ignored by iOS
+    //     this.locationAccuracy.request(this.locationAccuracy.REQUEST_PRIORITY_HIGH_ACCURACY).then(
+    //       () =>
+    //         this.getGeolocation(),
+    //       error =>
+    //         this.getOpenLocationservice()
+    //     );
+    //   } else {
+    //     this.getGeolocation();
+    //   }
+    // });
   }
 }
