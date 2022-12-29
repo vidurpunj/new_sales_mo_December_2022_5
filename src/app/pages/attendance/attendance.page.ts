@@ -50,6 +50,10 @@ export class AttendancePage implements OnInit {
   titleWeekly_Holiday: any;
   isShowAddress: boolean = false;
   status: any = 'x';
+  deviceInfo: any;
+  firstWeekOffDay: any;
+  secondWeekOffDay: any;
+  applyLeavePermission: boolean = false;
   constructor(
     public navCtrl: NavController,
     private updatevalidator: UpdateValidatorService,
@@ -57,8 +61,12 @@ export class AttendancePage implements OnInit {
     private apiProvider: ApiService,
     private ngZone: NgZone,
   ) {
+    // check network status
     this.checkNetworkStatus();
+    // get device info
+    this.getDeviceInfo();
   }
+
   getcurrentAttendanceStatus() {
     if (window.localStorage.getItem('currentAttendanceStatus') == "P") {
       this.currentStatusValue = "P";
@@ -87,7 +95,8 @@ export class AttendancePage implements OnInit {
       if (window.localStorage.getItem('weekOffDay1') != "undefined") {
         console.log("1", window.localStorage.getItem('weekOffDay1'));
         // this.firstWeekOffDay = window.localStorage.getItem('weekOffDay1');
-      } if (window.localStorage.getItem('weekOffDay2') != "undefined") {
+      }
+      if (window.localStorage.getItem('weekOffDay2') != "undefined") {
         console.log("2", window.localStorage.getItem('weekOffDay2'));
         // this.secondWeekOffDay = window.localStorage.getItem('weekOffDay2');
       }
@@ -98,6 +107,7 @@ export class AttendancePage implements OnInit {
       this.currentStatusValue = "Attendance";
     }
   }
+
   goToHome() {
     this.navCtrl.navigateRoot('HomePage');
   }
@@ -139,6 +149,7 @@ export class AttendancePage implements OnInit {
       loader.dismiss();
     })
   }
+
   getcurrentattStatus(data) {
     console.log("getcurrentattStatus .....")
     if (data.current_status == "H") {
@@ -173,21 +184,33 @@ export class AttendancePage implements OnInit {
       this.IsInactive = true;
     }
   }
+
   isDesktopMode(): boolean {
     let isDesktop: boolean = false;
-    let deviceInfo = Device.getInfo();
-    // @ts-ignore
-    if (!deviceInfo.operatingSystem === 'android' && !deviceInfo.operatingSystem === 'ios') {
-      return isDesktop = true;
+    console.log("Access through Web: "+ this.deviceInfo.platform);
+    // return true if its now android or ios
+    if(this.deviceInfo.platform === 'android' || this.deviceInfo.platform === 'ios'){
+      isDesktop = false
+    }
+    if(this.deviceInfo.platform === 'web'){
+      isDesktop = true;
     }
     return isDesktop;
+  }
+
+  async getDeviceInfo() {
+    console.log("Getting device info ....................................");
+    this.deviceInfo = await Device.getInfo();
+    console.log("Device info:................." + this.deviceInfo);
+    console.log("Device info:................. platform: " + this.deviceInfo.platform);
+    console.log("Device info:................. operatingSystem: " + this.deviceInfo.operatingSystem);
   }
 
   timeOut() {
     this.Time = this.updatevalidator.getCurrent_Time();
     this.date = this.updatevalidator.getCurrentDate();
     if (this.isDesktopMode()) {
-      if (this.connected) {
+      if (this.connected === false) {
         this.updatevalidator.showAlert("Connection Error", "Check your connection and try again later");
       } else {
         let attendanceParamters: any = {
@@ -225,6 +248,7 @@ export class AttendancePage implements OnInit {
     }
     // this.timeOutServiceCall("sector 15, part 1 gurgaon");
   }
+
   getGeolocationAddress(GeoData) {
     let geoAddress: any = "";
     if (GeoData.subThoroughfare != "") {
@@ -323,6 +347,7 @@ export class AttendancePage implements OnInit {
       //loader.dismiss();
     });
   }
+
   PunchedAttendance(status) {
     this.isPresentEnable = true; // fortest;
     console.log("status", status);
@@ -340,6 +365,7 @@ export class AttendancePage implements OnInit {
     this.isAbsentEnable = true; // fortest;
     this.absentServiceCall();
   }
+
   async ngOnInit() {
     // API calls
     console.log("attendance Api calls on ngOnIt....")
@@ -363,6 +389,7 @@ export class AttendancePage implements OnInit {
     this.connected = status?.connected;
     this.connectionType = status?.connectionType;
   }
+
   punchedIn(punchStatus) {
     // this.Time = this.updatevalidator.getCurrent_Time();
     // this.date = this.updatevalidator.getCurrentDate();
@@ -490,6 +517,7 @@ export class AttendancePage implements OnInit {
       //loader.dismiss();
     })
   }
+
   getAbsentStatus(status) {
     this.isShowAddress = false;
     this.status = status;
@@ -506,6 +534,7 @@ export class AttendancePage implements OnInit {
     this.holidayStatus = false
     this.IsOnLeave = false
   }
+
   getPunchedInstatus(status) {
     this.status = status;
     this.btnclass = "present";
@@ -521,5 +550,8 @@ export class AttendancePage implements OnInit {
     this.IsInactive = true;
     this.holidayStatus = false
     this.IsOnLeave = false;
+  }
+  applyLeave() {
+    this.navCtrl.navigateForward('ApplyLeavePage');
   }
 }

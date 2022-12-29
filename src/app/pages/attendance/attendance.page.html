@@ -1,115 +1,117 @@
-<!--<ion-header>-->
-<!--  <ion-toolbar>-->
-<!--    <ion-row>-->
-<!--      <ion-col col-6 class="leftNav">-->
-<!--        <button ion-button menuToggle class="menuIcon">-->
-<!--          <ion-icon name="menu"></ion-icon>-->
-<!--        </button>-->
-<!--        <button ion-button class="iconOnly" (click)="goToHome()">-->
-<!--          <ion-icon name="home"></ion-icon>-->
-<!--        </button>-->
-<!--      </ion-col>-->
-<!--    </ion-row>-->
-<!--    <ion-row>-->
-<!--      <ion-col col-12 class="pageTitle">-->
-<!--        <ion-title>Attendance</ion-title>-->
-<!--      </ion-col>-->
-<!--    </ion-row>-->
-<!--  </ion-toolbar>-->
-<!--</ion-header>-->
+<ion-header>
+  <ion-toolbar>
+    <ion-row>
+      <ion-col col-6 class="leftNav">
+        <button ion-button menuToggle class="menuIcon">
+          <ion-icon name="menu"></ion-icon>
+        </button>
+        <button ion-button class="iconOnly" (click)="goToHome()">
+          <ion-icon name="home"></ion-icon>
+        </button>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col col-12 class="pageTitle">
+        <ion-title>Attendance</ion-title>
+      </ion-col>
+    </ion-row>
+  </ion-toolbar>
+</ion-header>
 
-<!--<ion-content class="scroll-content-web">-->
+<ion-content class="scroll-content-web">
 
-<!--  <ion-row class="Acontent{{activeStatusCSS}} timeout" *ngIf="IsInactive">-->
-<!--    <div class="text" class="attendanceBtn">-->
-<!--      <div class="statusIcon">-->
-<!--        <div class="Aresponse {{btnclass}}">-->
-<!--          <img alt="Compelete" class="Pleft" src="../assets/imgs/{{btnImg}}">-->
-<!--        </div>-->
-<!--      </div>-->
+  <ion-row class="Acontent{{activeStatusCSS}} timeout" *ngIf="IsInactive">
+    <div class="text" class="attendanceBtn">
+      <div class="statusIcon">
+        <div class="Aresponse {{btnclass}}">
+          <img alt="Compelete" class="Pleft" src="../assets/imgs/{{btnImg}}">
+        </div>
+      </div>
 
-<!--      <p>{{message}}</p>-->
+      <p>{{message}}</p>
 
-<!--      <p *ngIf="dateTime"><strong>Time In</strong></p>-->
+      <p *ngIf="dateTime"><strong>Time In</strong></p>
 
-<!--      <p class="Aloc"> {{dateTime}}-->
-<!--        <br/>-->
-<!--        <span *ngIf="!isDesktopMode()">{{geoLocationData}}-->
-<!--        </span>-->
-<!--      </p>-->
+      <p class="Aloc"> {{dateTime}}
+        <br/>
+        <span *ngIf="!isDesktopMode()">{{geoLocationData}}
+        </span>
+      </p>
 
-<!--      <ng-container *ngIf="timeOutTime">-->
-<!--        <p><strong>Time Out</strong></p>-->
+      <ng-container *ngIf="timeOutTime">
+        <p><strong>Time Out</strong></p>
 
-<!--        <p class="Aloc"> {{timeOutTime}}-->
-<!--          <br/>-->
-<!--          <span *ngIf="!isDesktopMode()">{{timeOutGeoLocation}}-->
-<!--          </span>-->
-<!--        </p>-->
-<!--      </ng-container>-->
+        <p class="Aloc"> {{timeOutTime}}
+          <br/>
+          <span *ngIf="!isDesktopMode()">{{timeOutGeoLocation}}
+          </span>
+        </p>
+      </ng-container>
 
-<!--      <ion-col col-6 *ngIf="!timeOutTime && dateTime">-->
-<!--        <button (click)="timeOut()" ion-button class="absent timeout-web">Time-->
-<!--          <br/>Out</button>-->
-<!--      </ion-col>-->
-<!--    </div>-->
-<!--  </ion-row>-->
+      <ion-col col-6 *ngIf="!timeOutTime && dateTime">
+        <button (click)="timeOut()" ion-button class="absent timeout-web">Time
+          <br/>Out</button>
+      </ion-col>
+    </div>
+  </ion-row>
 
-<!--  <ion-row class="markA" *ngIf="IsInactive">-->
-<!--    <ion-col col-6 class="attendanceBtn {{btnclassdeactive}}">-->
-<!--      <button (click)="PunchedAttendance('P')" *ngIf="!isPresent" [disabled]="isPresentEnable" ion-button class="present">Mark-->
-<!--        <br/>Present</button>-->
-<!--    </ion-col>-->
-<!--    <ion-col col-6 class="attendanceBtn {{btnclassdeactive}}">-->
-<!--      <button (click)="applyAbsent()" *ngIf="!isAbsent" [disabled]="isAbsentEnable" ion-button class="absent">Mark-->
-<!--        <br/>Absent</button>-->
-<!--    </ion-col>-->
-<!--  </ion-row>-->
+  <ion-row class="markA" *ngIf="IsInactive">
+    <ion-col col-6 class="attendanceBtn {{btnclassdeactive}}">
+      <button (click)="PunchedAttendance('P')" *ngIf="!isPresent" [disabled]="isPresentEnable" ion-button class="present">Mark
+        <br/>Present</button>
+    </ion-col>
+    <ion-col col-6 class="attendanceBtn {{btnclassdeactive}}">
+      <button (click)="applyAbsent()" *ngIf="!isAbsent" [disabled]="isAbsentEnable" ion-button class="absent">Mark
+        <br/>Absent</button>
+    </ion-col>
+  </ion-row>
 
-<!--  <ion-row class="Acontent{{activeStatusCSS}}" *ngIf="holidayStatus">-->
-<!--    <div class="text">-->
-<!--      <p>-->
-<!--        <strong>{{titleWeekly_Holiday}}</strong>-->
-<!--      </p>-->
-<!--&lt;!&ndash;      <p *ngIf="currentStatusValue=='W'"><span>({{firstWeekOffDay}}</span><span *ngIf="secondWeekOffDay">,{{secondWeekOffDay}}</span>)</p>&ndash;&gt;-->
-<!--      <p></p>-->
-<!--      <p>Are you working today?</p>-->
-
-
-
-<!--      <div class="holidaystatus">-->
-<!--        <ion-col col-6>-->
-<!--          <button ion-button class="Hbtn border-x">No</button>-->
-<!--        </ion-col>-->
-<!--        <ion-col col-6>-->
-<!--          <button ion-button (click)="PunchedAttendance('O')" class="Hbtn border {{Hstatus}}">Yes</button>-->
-<!--        </ion-col>-->
-<!--      </div>-->
-
-<!--    </div>-->
-<!--  </ion-row>-->
-
-<!--&lt;!&ndash;  <ion-row class="Acontent{{activeStatusCSS}}" *ngIf="IsOnLeave">&ndash;&gt;-->
-<!--&lt;!&ndash;    <div class="text">&ndash;&gt;-->
-<!--&lt;!&ndash;      <p>&ndash;&gt;-->
-<!--&lt;!&ndash;        <strong>You are on leave</strong>&ndash;&gt;-->
-<!--&lt;!&ndash;      </p>&ndash;&gt;-->
-<!--&lt;!&ndash;      <p class="Aloc">{{startLeaveDate}} to {{endLeaveDate}}</p>&ndash;&gt;-->
-
-<!--&lt;!&ndash;      <div class="statusIcon">&ndash;&gt;-->
-<!--&lt;!&ndash;        <div class="Aresponse leaveStatus ">&ndash;&gt;-->
-<!--&lt;!&ndash;          <img alt="Compelete" class="Pleft" src="../assets/imgs/leave.png">&ndash;&gt;-->
-<!--&lt;!&ndash;        </div>&ndash;&gt;-->
-<!--&lt;!&ndash;      </div>&ndash;&gt;-->
-
-<!--&lt;!&ndash;    </div>&ndash;&gt;-->
-<!--&lt;!&ndash;  </ion-row>&ndash;&gt;-->
-
-<!--&lt;!&ndash;  <ion-row class="bottomBar">&ndash;&gt;-->
-<!--&lt;!&ndash;    <ion-col col-12 class="{{applyLeavePermission}}">&ndash;&gt;-->
-<!--&lt;!&ndash;      <button class="defaultBtn" (click)="applyLeave()" ion-button>Apply for Leave</button>&ndash;&gt;-->
-<!--&lt;!&ndash;    </ion-col>&ndash;&gt;-->
-<!--&lt;!&ndash;  </ion-row>&ndash;&gt;-->
+  <ion-row class="Acontent{{activeStatusCSS}}" *ngIf="holidayStatus">
+    <div class="text">
+      <p>
+        <strong>{{titleWeekly_Holiday}}</strong>
+      </p>
+      <p *ngIf="currentStatusValue==='W'"><span>({{firstWeekOffDay}}</span><span *ngIf="secondWeekOffDay">,{{secondWeekOffDay}}</span>)</p>
+      <p></p>
+      <p>Are you working today?</p>
 
 
-<!--</ion-content>-->
+
+      <div class="holidaystatus">
+        <ion-col col-6>
+          <button ion-button class="Hbtn border-x">No</button>
+        </ion-col>
+        <ion-col col-6>
+          <button ion-button (click)="PunchedAttendance('O')" class="Hbtn border {{Hstatus}}">Yes</button>
+        </ion-col>
+      </div>
+
+    </div>
+  </ion-row>
+
+<!--  <ion-row class="Acontent{{activeStatusCSS}}" *ngIf="IsOnLeave">-->
+  <ion-row *ngIf="IsOnLeave">
+    <div class="text">
+      <p>
+        <strong>You are on leave</strong>
+      </p>
+      <p class="Aloc">{{startLeaveDate}} to {{endLeaveDate}}</p>
+
+      <div class="statusIcon">
+        <div class="Aresponse leaveStatus ">
+          <img alt="Compelete" class="Pleft" src="../assets/imgs/leave.png">
+        </div>
+      </div>
+
+    </div>
+  </ion-row>
+
+  <ion-row class="bottomBar">
+<!--    <ion-col col-12 class="{{applyLeavePermission}}">-->
+    <ion-col col-12>
+      <button class="defaultBtn" (click)="applyLeave()" ion-button>Apply for Leave</button>
+    </ion-col>
+  </ion-row>
+
+
+</ion-content>
