@@ -289,7 +289,7 @@ export class OtpBasePage {
     this.menu.close();
     console.log("commented below 2 lines ====>>>>")
     // this.events.unsubscribe('user:created', () => { });
-    // this.navCtrl.setRoot('LoginPage');
+    this.navCtrl.navigateRoot('login');
     window.localStorage.clear();
   }
 

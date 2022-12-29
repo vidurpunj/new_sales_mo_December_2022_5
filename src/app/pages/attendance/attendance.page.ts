@@ -116,7 +116,7 @@ export class AttendancePage implements OnInit {
         console.log("Now inside the ......")
         // this.attendanceCurrentStatusServiceSuccess = this.apiProvider.getAuthService('initialApi/'+window.localStorage.getItem('userid'), 'GET')
         this.attendanceCurrentStatusServiceSuccess = this.apiProvider.getAuthService('initialApi/' + window.localStorage.getItem('userid') + '/' + window.localStorage.getItem('org_id'), 'GET')
-        await this.attendanceCurrentStatusServiceSuccess.subscribe(result => {
+        this.attendanceCurrentStatusServiceSuccess.subscribe(result => {
           console.log("initalAPiResult:" + JSON.stringify(result));
           if (result.status == 1) {
             this.getcurrentattStatus(result.data);
@@ -140,6 +140,7 @@ export class AttendancePage implements OnInit {
     })
   }
   getcurrentattStatus(data) {
+    console.log("getcurrentattStatus .....")
     if (data.current_status == "H") {
       this.holidayStatus = true;
       this.IsInactive = false;
