@@ -1,9 +1,38 @@
+
 <ion-header>
   <ion-toolbar>
-    <ion-title>Calendar</ion-title>
+    <ion-row>
+      <ion-col col-3>
+<!--        <button ion-button icon-only (click)="SaveCalenderInfo(dateRange)" Class="Done">-->
+<!--          Done-->
+<!--        </button>-->
+      </ion-col>
+      <ion-col col-6>
+        <h3 class="title">Select Date</h3>
+      </ion-col>
+      <ion-col col-3>
+<!--        <button ion-button icon-only (click)="dismiss()" class="cancel">-->
+<!--          Cancel-->
+<!--        </button>-->
+      </ion-col>
+    </ion-row>
+
+
   </ion-toolbar>
+
 </ion-header>
 
-<ion-content>
-
+<ion-content padding>
+<!--  <ion-calendar [(ngModel)]="dateRange"-->
+<!--                [options]="optionsRange"-->
+<!--                [type]="type"-->
+<!--                [format]="'YYYY-MM-DD'" (onChange)="changeCalender($event,dateRange)">-->
+<!--  </ion-calendar>-->
+  <ion-calendar [(ngModel)]="dateRange"
+                [options]="optionsRange"
+                (change)="onChange($event)"
+                [type]="type"
+                [format]="'YYYY-MM-DD'"
+                (change)="changeCalender($event,dateRange)">
+  </ion-calendar>
 </ion-content>

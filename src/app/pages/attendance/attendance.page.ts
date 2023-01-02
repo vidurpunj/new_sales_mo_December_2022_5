@@ -6,6 +6,7 @@ import {Network} from "@capacitor/network";
 import {PluginListenerHandle} from "@capacitor/core";
 import {ApiService} from "../../services/api/api.service";
 import {Observable} from "rxjs";
+import {DesignUtilityService} from "../../services/design-utility.service";
 
 @Component({
   selector: 'app-attendance',
@@ -54,12 +55,14 @@ export class AttendancePage implements OnInit {
   firstWeekOffDay: any;
   secondWeekOffDay: any;
   applyLeavePermission: boolean = false;
+  geolocation: any;
   constructor(
     public navCtrl: NavController,
     private updatevalidator: UpdateValidatorService,
     private loadingCtrl: LoadingController,
     private apiProvider: ApiService,
     private ngZone: NgZone,
+    private _geolocation: DesignUtilityService
   ) {
     // check network status
     this.checkNetworkStatus();
@@ -349,6 +352,7 @@ export class AttendancePage implements OnInit {
   }
 
   PunchedAttendance(status) {
+    console.log("mark the present ....")
     this.isPresentEnable = true; // fortest;
     console.log("status", status);
     if (status == 'O') {
@@ -391,92 +395,169 @@ export class AttendancePage implements OnInit {
   }
 
   punchedIn(punchStatus) {
-    // this.Time = this.updatevalidator.getCurrent_Time();
-    // this.date = this.updatevalidator.getCurrentDate();
-    // if (this.isDesktopMode()) {
-    //   if (this.connected) {
-    //     this.updatevalidator.showAlert("Connection Error", "Check your connection and try again later");
-    //   }
-    //   else {
-    //     if (punchStatus == 'P') {
-    //       console.log("Present");
-    //       let attendanceParamters = {
-    //         org_id: window.localStorage.getItem('org_id'),
-    //         userId: window.localStorage.getItem('userid'),
-    //         emp_name: window.localStorage.getItem('user_name'),
-    //         status: 'P',
-    //         Amode: 'M',
-    //         location: { latitude: "", longitude: "", address: "" },
-    //         date: this.date,
-    //         time: this.Time
-    //       }
-    //       this.punchedInserviceCall(attendanceParamters, "startGeolocation");
-    //     } else if (punchStatus == 'O') {
-    //       let attendanceParamters: any = {
-    //         org_id: window.localStorage.getItem('org_id'),
-    //         userId: window.localStorage.getItem('userid'),
-    //         emp_name: window.localStorage.getItem('user_name'),
-    //         status: 'O',
-    //         Amode: 'M',
-    //         location: { latitude: "", longitude: "", address: "" },
-    //         date: this.date,
-    //         time: this.Time
-    //       }
-    //       console.log("holiday");
-    //       this.punchedInHolidayserviceCall(attendanceParamters, "startGeolocation");
-    //     }
-    //   }
-    // } else {
-    //   this.updatevalidator.getOpenLocationservice();
-    //   this.events.subscribe('GeolocationData', (GeoData) => {
-    //     if (GeoData != null || GeoData != undefined) {
-    //       // let startGeolocation = GeoData.subLocality + "," + GeoData.locality;
-    //       // let startGeolocation = GeoData.subThoroughfare + "," + GeoData.thoroughfare + "," + GeoData.subLocality + "," +
-    //       //                       GeoData.locality + "," + GeoData.subAdministrativeArea + "," + GeoData.administrativeArea + "-" + GeoData.postalCode;
-    //
-    //       let startGeolocation = this.getGeolocationAddress(GeoData);
-    //       this.latitude = GeoData.latitude,
-    //         this.longitude = GeoData.longitude
-    //       if (this.networkType === 'offline') {
-    //         this.updatevalidator.showAlert("Connection Error", "Check your connection and try again later");
-    //       }
-    //       else {
-    //         if (punchStatus == 'P') {
-    //           console.log("Present");
-    //           let attendanceParamters = {
-    //             org_id: window.localStorage.getItem('org_id'),
-    //             userId: window.localStorage.getItem('userid'),
-    //             emp_name: window.localStorage.getItem('user_name'),
-    //             status: 'P',
-    //             Amode: 'M',
-    //             location: { latitude: this.latitude, longitude: this.longitude, address: startGeolocation },
-    //             date: this.date,
-    //             time: this.Time
-    //           }
-    //           this.punchedInserviceCall(attendanceParamters, startGeolocation);
-    //         } else if (punchStatus == 'O') {
-    //           let attendanceParamters: any = {
-    //             org_id: window.localStorage.getItem('org_id'),
-    //             userId: window.localStorage.getItem('userid'),
-    //             emp_name: window.localStorage.getItem('user_name'),
-    //             status: 'O',
-    //             Amode: 'M',
-    //             location: { latitude: this.latitude, longitude: this.longitude, address: startGeolocation },
-    //             date: this.date,
-    //             time: this.Time
-    //           }
-    //           console.log("holiday");
-    //           this.punchedInHolidayserviceCall(attendanceParamters, startGeolocation);
-    //         }
-    //       }
-    //     }
-    //     else {
-    //       this.updatevalidator.getOpenLocationservice();
-    //     }
-    //   });
-    // }
+    console.log("Start ....")
+    this.Time = this.updatevalidator.getCurrent_Time();
+    this.date = this.updatevalidator.getCurrentDate();
+    if (this.isDesktopMode()) {
+      if (this.connected === false) {
+        this.updatevalidator.showAlert("Connection Error", "Check your connection and try again later");
+      }
+      else {
+        if (punchStatus == 'P') {
+          console.log("Present .......................");
+          let attendanceParamters = {
+            org_id: window.localStorage.getItem('org_id'),
+            userId: window.localStorage.getItem('userid'),
+            emp_name: window.localStorage.getItem('user_name'),
+            status: 'P',
+            Amode: 'M',
+            location: { latitude: "", longitude: "", address: "" },
+            date: this.date,
+            time: this.Time
+          }
+          this.punchedInserviceCall(attendanceParamters, "startGeolocation");
+        } else if (punchStatus == 'O') {
+          let attendanceParamters: any = {
+            org_id: window.localStorage.getItem('org_id'),
+            userId: window.localStorage.getItem('userid'),
+            emp_name: window.localStorage.getItem('user_name'),
+            status: 'O',
+            Amode: 'M',
+            location: { latitude: "", longitude: "", address: "" },
+            date: this.date,
+            time: this.Time
+          }
+          console.log("holiday");
+          this.punchedInHolidayserviceCall(attendanceParamters, "startGeolocation");
+        }
+      }
+    } else {
+      // if the device is not a Desktop
+      // It is a mobile device
+      this.updatevalidator.getOpenLocationservice();
+      // this.events.subscribe('GeolocationData', (GeoData) => {
+      this._geolocation.geolocation.subscribe((GeoData) => {
+        if (GeoData != null || GeoData != undefined) {
+          // let startGeolocation = GeoData.subLocality + "," + GeoData.locality;
+          // let startGeolocation = GeoData.subThoroughfare + "," + GeoData.thoroughfare + "," + GeoData.subLocality + "," +
+          //                       GeoData.locality + "," + GeoData.subAdministrativeArea + "," + GeoData.administrativeArea + "-" + GeoData.postalCode;
+
+          let startGeolocation = this.getGeolocationAddress(GeoData);
+          console.log("Geo Data ...................", GeoData)
+          debugger;
+          // Need to add the code here for geolocation
+          // this.latitude = GeoData.latitude,
+          //   this.longitude = GeoData.longitude
+          // The
+          if (this.connected === false) {
+            this.updatevalidator.showAlert("Connection Error", "Check your connection and try again later");
+          }
+          else {
+            if (punchStatus == 'P') {
+              console.log("Present");
+              let attendanceParamters = {
+                org_id: window.localStorage.getItem('org_id'),
+                userId: window.localStorage.getItem('userid'),
+                emp_name: window.localStorage.getItem('user_name'),
+                status: 'P',
+                Amode: 'M',
+                location: { latitude: this.latitude, longitude: this.longitude, address: startGeolocation },
+                date: this.date,
+                time: this.Time
+              }
+              this.punchedInserviceCall(attendanceParamters, startGeolocation);
+            } else if (punchStatus == 'O') {
+              let attendanceParamters: any = {
+                org_id: window.localStorage.getItem('org_id'),
+                userId: window.localStorage.getItem('userid'),
+                emp_name: window.localStorage.getItem('user_name'),
+                status: 'O',
+                Amode: 'M',
+                location: { latitude: this.latitude, longitude: this.longitude, address: startGeolocation },
+                date: this.date,
+                time: this.Time
+              }
+              console.log("holiday");
+              this.punchedInHolidayserviceCall(attendanceParamters, startGeolocation);
+            }
+          }
+        }
+        else {
+          this.updatevalidator.getOpenLocationservice();
+        }
+      });
+    }
   }
 
+  async punchedInHolidayserviceCall(attendanceParamters, startGeolocation) {
+    let loader = await this.loadingCtrl.create({
+      cssClass: 'activity-detail-loading',
+      spinner: "dots"
+    });
+    loader.present().then(() => {
+
+      console.log(attendanceParamters);
+      this.attendanceServiceSuccess = this.apiProvider.postauthService('attendanceApi/attendance', attendanceParamters, 'POST')
+      this.attendanceServiceSuccess.subscribe(attendanceResult => {
+          console.log("AttendanceResult:" + JSON.stringify(attendanceResult));
+          if (attendanceResult.status == 1) {
+            this.dateTime = this.updatevalidator.getDateFormat(attendanceResult.data.atten_date) + " " + attendanceResult.data.signin_time;
+            if (!this.isDesktopMode) {
+              this.geoLocationData = startGeolocation
+            }
+            this.holidayStatus = false;
+            this.getPunchedInstatus(attendanceResult.data.attendance_status);
+            //  this.updatevalidator.showToast(attendanceResult.message.message)
+            loader.dismiss();
+          } else if (attendanceResult.status == 0) {
+            this.isPresentEnable = false; // fortest;
+            this.updatevalidator.showToast(attendanceResult.message.message);
+            loader.dismiss();
+          }
+        },
+        (err) => {
+          this.isPresentEnable = false; // fortest;
+          this.updatevalidator.showAlert("Server Error", "Please try again!!");
+          loader.dismiss();
+        })
+      // loader.dismiss();
+    })
+  }
+  async punchedInserviceCall(attendanceParamters, startGeolocation) {
+    let loader = await this.loadingCtrl.create({
+      cssClass: 'activity-detail-loading',
+      spinner: "dots"
+    });
+    loader.present().then(() => {
+
+      console.log(attendanceParamters);
+      this.attendanceServiceSuccess = this.apiProvider.postauthService('attendanceApi/attendance', attendanceParamters, 'POST')
+      this.attendanceServiceSuccess.subscribe(attendanceResult => {
+          console.log("AttendanceResult:" + JSON.stringify(attendanceResult));
+          if (attendanceResult.status == 1) {
+            if (!this.isDesktopMode) {
+              this.geoLocationData = startGeolocation
+            }
+
+            this.dateTime = this.updatevalidator.getDateFormat(attendanceResult.data.atten_date) + " " + attendanceResult.data.signin_time;
+            this.getPunchedInstatus(attendanceResult.data.attendance_status);
+            this.getCurrentInitialStatus();
+            // this.updatevalidator.showToast(attendanceResult.message.message)
+            loader.dismiss();
+          } else if (attendanceResult.status == 0) {
+            this.isPresentEnable = false; // fortest;
+            this.updatevalidator.showToast(attendanceResult.message.message)
+            loader.dismiss();
+          }
+        }, (err) => {
+          this.isPresentEnable = false; // fortest;
+          this.updatevalidator.showAlert("Server Error", "Please try again!!");
+          loader.dismiss();
+        }
+      )
+      //loader.dismiss();
+    });
+  }
   async absentServiceCall() {
     console.log("Attendance service call ....")
     let loader = await this.loadingCtrl.create({

@@ -29,6 +29,10 @@ const routes: Routes = [
   {
     path: 'ApplyLeavePage',
     loadChildren: () => import('./pages/apply-leave-page/apply-leave-page.module').then( m => m.ApplyLeavePagePageModule)
+  },
+  {
+    path: 'calendar',
+    loadChildren: () => import('./pages/calendar/calendar.module').then( m => m.CalendarPageModule)
   }
 ];
 

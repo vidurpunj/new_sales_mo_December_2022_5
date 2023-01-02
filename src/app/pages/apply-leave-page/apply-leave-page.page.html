@@ -1,9 +1,37 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>ApplyLeavePage</ion-title>
+    <ion-row>
+      <ion-title>Apply For Leave</ion-title>
+    </ion-row>
   </ion-toolbar>
 </ion-header>
-
-<ion-content>
-
+<ion-content padding class="scroll-content-web">
+  <ion-row class="es-container">
+    <form novalidate [formGroup]="leave" class="formdesign">
+      <ion-list>
+        <ion-item (click)="fromDateOpenCalender()">
+          <ion-label>From Date</ion-label>
+          <ion-label>{{myDate}}</ion-label>
+        </ion-item>
+        <ion-item (click)="toDateOpenCalender()">
+          <ion-label>To Date</ion-label>
+          <ion-label>{{secondDate}}</ion-label>
+        </ion-item>
+        <ion-item>
+          <ion-label>Leave Type</ion-label>
+<!--          <ion-select placeholder="Leave Type" interface="popover" formControlName="leaveType">-->
+<!--            <ion-option *ngFor="let leaveType of leaveTypesDataList">{{leaveType.name}}</ion-option>-->
+<!--          </ion-select>-->
+        </ion-item>
+        <!--        <ion-item>-->
+        <!--          <ion-textarea placeholder="Enter more information here..." formControlName="description"></ion-textarea>-->
+        <!--        </ion-item>-->
+        <!--        <ion-item>-->
+        <!--          <button ion-button block *ngIf="!isSubmit" class="defaultBtn" (click)="applyLeave(leave)" color="dark" type="submit" [disabled]="leave.invalid">Apply</button>-->
+        <!--          <button ion-button block *ngIf="isSubmit" class="defaultBtn"   color="dark" type="submit" [disabled]="true" >Apply</button>-->
+        <!--        </ion-item>-->
+      </ion-list>
+    </form>
+  </ion-row>
 </ion-content>
+
