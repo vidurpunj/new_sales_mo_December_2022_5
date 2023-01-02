@@ -25,10 +25,12 @@ export class CalendarPage implements OnInit {
     from: this.navParams.get('minDate'),
     to: this.navParams.get('toDate'),
   };
+  modal: any;
 
   constructor(
     private updatevalidator: UpdateValidatorService,
-    public navParams: NavParams
+    public navParams: NavParams,
+    // private viewCtrl: ViewController
     // private viewCtrl: ViewController
   ) {
     console.log('dateMode', this.navParams.get('dateMode'))
@@ -45,6 +47,10 @@ export class CalendarPage implements OnInit {
   }
 
   ngOnInit() {
+  }
+
+  dismiss() {
+    // modal.dismiss()
   }
 
   SaveCalenderInfo(data) {

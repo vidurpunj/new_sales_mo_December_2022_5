@@ -18,38 +18,34 @@ export class ApplyLeavePagePage implements OnInit {
   altDate: Date = new Date();
   secondDate: string = "";
   leaveTypesDataList: any[] = [];
-
+  leave: FormGroup;
+  myCalendar: any;
   constructor(
     public formBuilder: FormBuilder,
     private updatevalidator: UpdateValidatorService,
     private modalCtrl: ModalController
   ) {
+    this.leave = this.formBuilder.group({
+      fromDate: new FormControl('', [Validators.required]),
+      toDate: new FormControl('', [Validators.required]),
+      leaveType: new FormControl('', [Validators.required]),
+      description: new FormControl()
+    });
   }
 
 
   ngOnInit() {
-    // leave = this.formBuilder.group({
-    //   fromDate: new FormControl(this.fromDate, [Validators.required]),
-    //   toDate: new FormControl('', [Validators.required]),
-    //   leaveType: new FormControl('', [Validators.required]),
-    //   description: new FormControl()
-    // });
+
     this.myDate = this.updatevalidator.getMonthDateFormat(this.date)
     this.fromDate = this.updatevalidator.getAltDateFormat(this.altDate);
     // this.leave.get('fromDate').setValue(this.fromDate);
   }
 
-  leave = this.formBuilder.group({
-    fromDate: new FormControl('', [Validators.required]),
-    toDate: new FormControl('', [Validators.required]),
-    leaveType: new FormControl('', [Validators.required]),
-    description: new FormControl()
-  });
 
   async fromDateOpenCalender() {
     console.log("called from date in calender.......");
     let from: Date = new Date();
-    let myCalendar = await this.modalCtrl.create({
+    this.myCalendar = await this.modalCtrl.create({
       component: CalendarPage,
       breakpoints: [0, 0.3, 0.5, 0.8],
       initialBreakpoint: 0.5,
@@ -59,25 +55,21 @@ export class ApplyLeavePagePage implements OnInit {
         dateMode: 'single'
       },
     });
-    // let myCalendar = this.modalCtrl.create(CalendarPage, {
-    //     minDate: new Date().setMonth(new Date().getMonth() - 1),
-    //     toDate: new Date().setMonth(new Date().getMonth() + 36)
-    //   }
-    // );
-
-    myCalendar.present();
-    // myCalendar.onDidDismiss((date) => {
-    //   console.log("selectedDate", date);
-    //   if (date) {
-    //     this.leave.get('fromDate').setValue(this.updatevalidator.getAltDateFormat(date));
-    //     this.leave.get('toDate').setValue('');
-    //     this.toDate = '';
-    //     this.secondDate = '';
-    //     this.fromDate = this.updatevalidator.getAltDateFormat(date);
-    //     this.myDate = this.updatevalidator.getMonthDateFormat(this.updatevalidator.getAltDateFormat(date))
-    //
-    //   }
-    // })
+    this.myCalendar.present();
+    this.myCalendar.onDidDismiss().then((date) => {
+      console.log("selectedDate ..... .... ", date);
+      if (date) {
+        alert("Inside the mycalendar data ....");
+        console.log(date);
+        // debugger
+        // this.leave.get('fromDate').setValue(this.updatevalidator.getAltDateFormat(date));
+        // this.leave.get('toDate').setValue('');
+        this.toDate = '';
+        this.secondDate = '';
+        this.fromDate = this.updatevalidator.getAltDateFormat(date);
+        this.myDate = this.updatevalidator.getMonthDateFormat(this.updatevalidator.getAltDateFormat(date))
+      }
+    })
   }
 
   toDateOpenCalender() {
