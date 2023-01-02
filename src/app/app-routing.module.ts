@@ -27,8 +27,8 @@ const routes: Routes = [
     loadChildren: () => import('./pages/attendance/attendance.module').then(m => m.AttendancePageModule)
   },
   {
-    path: 'apply-for-leave',
-    loadChildren: () => import('./pages/apply-for-leave/apply-for-leave.module').then( m => m.ApplyForLeavePageModule)
+    path: 'ApplyLeavePage',
+    loadChildren: () => import('./pages/apply-leave-page/apply-leave-page.module').then( m => m.ApplyLeavePagePageModule)
   }
 ];
 

@@ -1,12 +1,12 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
-import { ApplyForLeavePage } from './apply-for-leave.page';
+import { ApplyLeavePagePage } from './apply-leave-page.page';
 
 const routes: Routes = [
   {
     path: '',
-    component: ApplyForLeavePage
+    component: ApplyLeavePagePage
   }
 ];
 
@@ -14,4 +14,4 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule],
 })
-export class ApplyForLeavePageRoutingModule {}
+export class ApplyLeavePagePageRoutingModule {}

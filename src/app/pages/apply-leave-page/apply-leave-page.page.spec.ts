@@ -1,19 +1,19 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { IonicModule } from '@ionic/angular';
 
-import { ApplyForLeavePage } from './apply-for-leave.page';
+import { ApplyLeavePagePage } from './apply-leave-page.page';
 
-describe('ApplyForLeavePage', () => {
-  let component: ApplyForLeavePage;
-  let fixture: ComponentFixture<ApplyForLeavePage>;
+describe('ApplyLeavePagePage', () => {
+  let component: ApplyLeavePagePage;
+  let fixture: ComponentFixture<ApplyLeavePagePage>;
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ ApplyForLeavePage ],
+      declarations: [ ApplyLeavePagePage ],
       imports: [IonicModule.forRoot()]
     }).compileComponents();
 
-    fixture = TestBed.createComponent(ApplyForLeavePage);
+    fixture = TestBed.createComponent(ApplyLeavePagePage);
     component = fixture.componentInstance;
     fixture.detectChanges();
   }));

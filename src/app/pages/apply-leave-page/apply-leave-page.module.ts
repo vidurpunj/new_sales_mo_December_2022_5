@@ -4,17 +4,17 @@ import { FormsModule } from '@angular/forms';
 
 import { IonicModule } from '@ionic/angular';
 
-import { ApplyForLeavePageRoutingModule } from './apply-for-leave-routing.module';
+import { ApplyLeavePagePageRoutingModule } from './apply-leave-page-routing.module';
 
-import { ApplyForLeavePage } from './apply-for-leave.page';
+import { ApplyLeavePagePage } from './apply-leave-page.page';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
-    ApplyForLeavePageRoutingModule
+    ApplyLeavePagePageRoutingModule
   ],
-  declarations: [ApplyForLeavePage]
+  declarations: [ApplyLeavePagePage]
 })
-export class ApplyForLeavePageModule {}
+export class ApplyLeavePagePageModule {}
