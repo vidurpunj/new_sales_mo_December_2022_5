@@ -93,28 +93,31 @@ export class ApplyLeavePagePage implements OnInit {
   }
 
   async toDateOpenCalender() {
-    // this.myCalendar = await this.modalCtrl.create({
-    //   component: CalendarPage,
-    //   breakpoints: [0, 0.3, 0.5, 0.8],
-    //   initialBreakpoint: 0.5,
-    //   componentProps: {
-    //     minDate: new Date().setMonth(new Date().getMonth() - 1),
-    //     toDate: new Date().setMonth(new Date().getMonth() + 36),
-    //     dateMode: 'single'
-    //   },
-    // });
-    //
-    // this.myCalendar.present();
-    // this.myCalendar.onDidDismiss((date) => {
-    //   console.log("selectedDate .... ", date);
-    //   date = this.myCalendar;
-    //   if (date) {
-    //     // @ts-ignore
-    //     this.leave.get('toDate').setValue(this.updatevalidator.getAltDateFormat(date));
-    //     this.toDate = this.updatevalidator.getAltDateFormat(date)
-    //     this.secondDate = this.updatevalidator.getMonthDateFormat(this.updatevalidator.getAltDateFormat(date))
-    //   }
-    // })
+    let myCalendar = await this.modalCtrl.create({
+      component: CalendarPage,
+      breakpoints: [0, 0.3, 0.5, 0.8],
+      initialBreakpoint: 0.5,
+      componentProps: {
+        minDate: new Date().setMonth(new Date().getMonth() - 1),
+        toDate: new Date().setMonth(new Date().getMonth() + 36),
+        dateMode: 'single'
+      },
+    });
+    myCalendar.present();
+    this._designUtils.myCalendar.subscribe((response) => {
+      console.log("subscribe calendar .....");
+      console.log(response);
+      this.calendarInfo = response;
+      myCalendar.dismiss(); // when we call dismiss on didDidDismiss will get called
+      myCalendar.onDidDismiss().then((date) => {
+        console.log("selectedDate .... ", date);
+        date = response;
+        if (date) {
+          this.leave.controls['toDate'].setValue(this.updatevalidator.getAltDateFormat(date));
+          this.toDate = this.updatevalidator.getAltDateFormat(date)
+          this.secondDate = this.updatevalidator.getMonthDateFormat(this.updatevalidator.getAltDateFormat(date))
+        }
+      })
+    })
   }
-
 }
