@@ -11,7 +11,7 @@
         </button>
       </ion-col>
       <ion-col col-6 class="rightNav">
-        <button ion-button  class="menuIcon {{attendancePermission}}" (click)="goToAttendance()">
+        <button ion-button class="menuIcon {{attendancePermission}}" (click)="goToAttendance()">
           <span class="Astatus {{currentStatus}}" *ngIf="!isAttendance">{{currentStatusValue}}</span>
           <span *ngIf="isAttendance">{{currentStatusValue}}</span>
 
@@ -20,15 +20,87 @@
     </ion-row>
   </ion-toolbar>
 </ion-header>
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Blank</ion-title>
-    </ion-toolbar>
-  </ion-header>
+<ion-content>
+  <!-- If visit hasn't been started yet -->
+  <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
+    <ion-refresher-content pullingIcon="arrow-dropdown" pullingText="Pull to refresh" refreshingSpinner="circles"
+                           refreshingText="Refreshing...">
+    </ion-refresher-content>
+  </ion-refresher>
+  <ion-row class="Acontent">
+    <div class="text">
+      <div *ngIf="!visitStarted">
+        <!-- <button (click)="startvisit()" ion-button class="dhide submitbutton" [disabled]="isVisit">Start
+            <br/>Visit</button> -->
+        <button (click)="startvisit()" ion-button class="es-start-visit" [disabled]="isVisit">
+          <img src="assets/imgs/es-start-visit.png" alt="start visit">
+        </button>
+        <!-- <marquee direction="left" scrolldelay="60">Mark Your Attendance before you start a Visit.</marquee> -->
 
-  <div id="container">
-    <strong>Ready to create an app?</strong>
-    <p>Start with Ionic <a target="_blank" rel="noopener noreferrer" href="https://ionicframework.com/docs/components">UI Components</a></p>
-  </div>
+        <!-- Recent Visits -->
+        <div class="recentVisit">
+          <h2 class="header-titlte">Recent Visits
+            <span *ngIf="isRecentVistFound" class="Pright viewVisit" (click)="completevisit()">View All</span>
+          </h2>
+          <h2 class="dataNotFoundClass">{{isVisitAvailable}}</h2>
+          <ion-card id="{{allVisitList.visit_status}}" class="{{allVisitList.visit_status}}_{{allVisitList.visit_type}}"
+                    *ngFor="let allVisitList of allVistsDataList"
+                    (click)="GoToVisitInfo(allVisitList)">
+            <ion-card-header>
+              <div class="Pleft">
+                <h3 class="header_visit"
+                    *ngIf="allVisitList.visit_status === 'Completed'">{{allVisitList.contact_person}}</h3>
+                <h6 class="header_visit"
+                    *ngIf="allVisitList.visit_status === 'Incomplete'">{{allVisitList.start_location}}</h6>
+                <small class="Pleft">{{allVisitList.start_date}}, {{allVisitList.start_time}}</small>
+                <p class="desktop-view visit_status_web">{{allVisitList.visit_status}}</p>
+              </div>
+              <span class="Pright" *ngIf="allVisitList.visit_status === 'Completed'">
+                                    <ion-icon name="checkmark" class="onlyIcon"></ion-icon>
+                                </span>
+              <span class="Pright" *ngIf="allVisitList.visit_status === 'Incomplete'">
+                                    <ion-icon name="create" class="onlyIcon"></ion-icon>
+                                </span>
+
+            </ion-card-header>
+          </ion-card>
+        </div>
+      </div>
+    </div>
+        <!-- If visit has started -->
+        <div *ngIf="visitStarted">
+          <p class="visitStart">
+                    <span class="visitIcon startV">
+                        <ion-icon name="pin"></ion-icon>
+                    </span>
+            <span class="visitInfo">
+                        <strong>Visit Started</strong>
+                        <br><span *ngIf="!isDesktopMode()"> {{ startGeoLocationData }}</span>
+                        <br> {{ startDate }}, {{ startTime }}</span>
+          </p>
+          <div class="stopBtn" *ngIf="!visitStopped">
+                    <span class="visitIcon">
+                        <ion-icon name="pin"></ion-icon>
+                    </span>
+            <button class="submitbutton stopButton" (click)="stopVisit()" [disabled]="isVisitStop" ion-button>Stop Visit
+            </button>
+          </div>
+          <p class="visitStart stopped" *ngIf="visitStopped">
+                    <span class="visitIcon endV">
+                        <ion-icon name="pin"></ion-icon>
+                    </span>
+            <span class="visitInfo">
+                        <strong>Visit Stopped</strong>
+                        <br> <span *ngIf="!isDesktopMode()">{{ stopGeolocationData }}</span>
+                        <br> {{ endDate }}, {{ endTime }}</span>
+          </p>
+        </div>
+        <div>
+          <button class="addVisitSummary" *ngIf="visitStarted && !isVisitSummaryAdded" (click)="addVisitSummary()"
+                  ion-button>Add Visit Summary
+          </button>
+          <button class="addVisitSummary" *ngIf="isVisitSummaryAdded" ion-button [disabled]="true">Add Visit Summary
+          </button>
+        </div>
+  </ion-row>
 </ion-content>

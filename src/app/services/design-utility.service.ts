@@ -7,6 +7,14 @@ import {Subject} from "rxjs";
 export class DesignUtilityService {
 
   geolocation = new Subject<boolean>();
+  publishGeolocationData(data: any) {
+    this.myCalendar.next(data);
+  }
+
+  getGeolocationDataObs(): Subject<any> {
+    return this.myCalendar;
+  }
+
   public myCalendar = new Subject<any>();
   publishCalendarData(data: any) {
     this.myCalendar.next(data);
