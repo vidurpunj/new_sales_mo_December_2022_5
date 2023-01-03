@@ -33,6 +33,7 @@ export class LeavePage implements OnInit {
   selectedToDate: string = '';
   showSelectedDates: boolean = false;
 
+
   constructor(
     public navCtrl: NavController,
     private ngZone: NgZone,
@@ -105,7 +106,7 @@ export class LeavePage implements OnInit {
     });
     myCalendar.present();
     this._designUtils.myCalendar.subscribe((response) => {
-      console.log("subscribe calendar .....");
+      console.log("subscribe calendar on leave range page .....");
       console.log(response);
       this.calendarInfo = response;
       myCalendar.dismiss();
@@ -113,12 +114,15 @@ export class LeavePage implements OnInit {
         console.log(".... onDidDismiss selectedDate", date);
         date = this.calendarInfo;
         console.log("inside Calender date from and to ....")
-        // if ((this.updatevalidator.date_diff_indays(this.updatevalidator.getAltDateFormat(date.from), this.updatevalidator.getAltDateFormat(date.to)) < 61)) {
-        //   this.toDate = this.updatevalidator.getAltDateFormat(date.to);
-        //   this.fromDate = this.updatevalidator.getAltDateFormat(date.from);
-        // } else {
-        //   this.updatevalidator.showAlert("Exceeded", "Range of 60 days can be selected")
-        // }
+        // @ts-ignore
+        if ((this.updatevalidator.date_diff_indays(this.updatevalidator.getAltDateFormat(date.from), this.updatevalidator.getAltDateFormat(date.to)) < 61)) {
+          // @ts-ignore
+          this.toDate = this.updatevalidator.getAltDateFormat(date.to);
+          // @ts-ignore
+          this.fromDate = this.updatevalidator.getAltDateFormat(date.from);
+        } else {
+          this.updatevalidator.showAlert("Exceeded", "Range of 60 days can be selected")
+        }
       })
     });
   }
