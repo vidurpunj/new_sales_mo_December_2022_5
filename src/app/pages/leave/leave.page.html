@@ -1,0 +1,121 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-row>
+      <ion-col col-6 class="leftNav">
+        <button ion-button menuToggle class="menuIcon">
+          <ion-icon name="menu"></ion-icon>
+        </button>
+        <button ion-button class="iconOnly" (click)="goToHome()">
+          <ion-icon name="home"></ion-icon>
+        </button>
+      </ion-col>
+      <ion-col col-6 class="rightNav">
+        <button ion-button class="menuIcon" (click)="goToAttendance()" *ngIf="!isAdmin">
+          <span class="Astatus {{currentStatus}}" *ngIf="!isAttendance">{{currentStatusValue}}</span>
+          <span *ngIf="isAttendance">{{currentStatusValue}}</span>
+        </button>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col col-12 class="pageTitle">
+        <ion-title>Leaves</ion-title>
+      </ion-col>
+    </ion-row>
+  </ion-toolbar>
+</ion-header>
+
+
+<ion-content>
+  <div class="es-container m-t-20">
+    <ion-grid class="filterbydates">
+      <ion-row>
+        <ion-col col-8>
+          <p (click)="openCalendar()"><span>
+              <ion-icon name="calendar"></ion-icon>
+            </span> Select Dates
+          </p>
+        </ion-col>
+        <ion-col col-4>
+          <button ion-button class="filterdates primarybg" (click)="filterVisit()" [disabled]="fromDate === ''">
+            Filter
+          </button>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+    <ion-row>
+          <span class="infoMessage" *ngIf="fromDate === '' || !showSelectedDates ;">
+            <ion-icon class="infoCircle" name="information-circle"></ion-icon>Showing results for last 30 days
+          </span>
+      <!-- <ng-template #elseBlock><ion-icon name="information-circle"></ion-icon>Showing results from {{fromDate}} to {{toDate}}</ng-template> -->
+      <span class="infoMessage" *ngIf="showSelectedDates">
+            <ion-icon class="infoCircle" name="information-circle"></ion-icon>
+        {{selectedFromDate}} - {{selectedToDate}}
+          </span>
+    </ion-row>
+    <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
+      <ion-refresher-content pullingIcon="arrow-dropdown" pullingText="Pull to refresh" refreshingSpinner="circles"
+                             refreshingText="Refreshing...">
+      </ion-refresher-content>
+    </ion-refresher>
+    <ion-row class="Lcontent">
+      <ion-col col-6>
+        <p><small>All Leaves<span *ngIf="isAdmin">(Non-Pending)</span></small></p>
+      </ion-col>
+      <ion-col col-6 *ngIf="!isAdmin">
+        <button ion-button class="submitbutton" (click)="applyforleave()">Apply For Leave</button>
+      </ion-col>
+    </ion-row>
+    <h2 class="dataNotFoundClass" *ngIf="!isDataAvailable">{{IsDataFound}}</h2>
+    <ion-row *ngIf="!isAdmin" class="leaveBox">
+      <ion-card *ngFor="let getLeavestatus of getLeaveStatusDataList">
+        <ion-card-header class="leavesummary">
+          <ion-card-subtitle class="subtitle">
+            {{getLeavestatus.start_date}} - {{getLeavestatus.end_date}}
+            <span class="Bcolor"
+                  *ngIf="getLeavestatus.leave_status === 'pending'">{{getLeavestatus.leave_status}}</span>
+            <span class="Gcolor"
+                  *ngIf="getLeavestatus.leave_status === 'approved'">{{getLeavestatus.leave_status}}</span>
+            <span class="Rcolor"
+                  *ngIf="getLeavestatus.leave_status === 'rejected'">{{getLeavestatus.leave_status}}</span>
+            <ion-row>
+              <ion-col col-6 class="leaveTypeColor">{{getLeavestatus.name}}</ion-col>
+            </ion-row>
+          </ion-card-subtitle>
+          <ion-card-title class="reason">
+            <strong>Reason:</strong> {{getLeavestatus.reason}}
+            <br>
+            <br>
+            <strong class="Bcolor">Manager Comments:</strong> <span
+            *ngIf="getLeavestatus.admin_comments !== null; else elseBlock">{{getLeavestatus.admin_comments}}</span>
+            <ng-template #elseBlock>None</ng-template>
+          </ion-card-title>
+        </ion-card-header>
+      </ion-card>
+    </ion-row>
+
+    <ion-row *ngIf="isAdmin">
+      <ion-card *ngFor="let getLeavestatus of getLeaveStatusDataList">
+        <ion-card-header class="leavesummary">
+          <!-- <span class="distributorName">{{getLeavestatus.first_name}} {{getLeavestatus.last_name}}</span><br> -->
+          <span class="distributorName">{{getLeavestatus.emp_name}}</span><br>
+          <ion-card-subtitle class="subtitle">{{getLeavestatus.start_date}} - {{getLeavestatus.end_date}}
+            <span class="Gcolor" *ngIf="getLeavestatus.leave_status === 'approved'">{{getLeavestatus.leave_status}}</span>
+            <span class="Rcolor" *ngIf="getLeavestatus.leave_status === 'rejected'">{{getLeavestatus.leave_status}}</span>
+            <ion-row>
+              <ion-col col-6 class="leaveTypeColor">{{getLeavestatus.name}}</ion-col>
+            </ion-row>
+          </ion-card-subtitle>
+          <ion-card-title class="reason">
+            <strong>Reason:</strong> {{getLeavestatus.reason}}
+            <br>
+            <br>
+            <strong class="Bcolor">Manager Comments:</strong> <span
+            *ngIf="getLeavestatus.admin_comments !== null; else elseBlock">{{getLeavestatus.admin_comments}}</span>
+            <ng-template #elseBlock>None</ng-template>
+          </ion-card-title>
+        </ion-card-header>
+      </ion-card>
+    </ion-row>
+  </div>
+
+</ion-content>

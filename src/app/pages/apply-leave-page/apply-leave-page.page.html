@@ -19,17 +19,17 @@
         </ion-item>
         <ion-item>
           <ion-label>Leave Type</ion-label>
-<!--          <ion-select placeholder="Leave Type" interface="popover" formControlName="leaveType">-->
-<!--            <ion-option *ngFor="let leaveType of leaveTypesDataList">{{leaveType.name}}</ion-option>-->
-<!--          </ion-select>-->
+          <ion-select placeholder="Leave Type" interface="popover" formControlName="leaveType">
+            <ion-select-option *ngFor="let leaveType of leaveTypesDataList">{{leaveType.name}}</ion-select-option>
+          </ion-select>
         </ion-item>
-        <!--        <ion-item>-->
-        <!--          <ion-textarea placeholder="Enter more information here..." formControlName="description"></ion-textarea>-->
-        <!--        </ion-item>-->
-        <!--        <ion-item>-->
-        <!--          <button ion-button block *ngIf="!isSubmit" class="defaultBtn" (click)="applyLeave(leave)" color="dark" type="submit" [disabled]="leave.invalid">Apply</button>-->
-        <!--          <button ion-button block *ngIf="isSubmit" class="defaultBtn"   color="dark" type="submit" [disabled]="true" >Apply</button>-->
-        <!--        </ion-item>-->
+                <ion-item>
+                  <ion-textarea placeholder="Enter more information here..." formControlName="description"></ion-textarea>
+                </ion-item>
+                <ion-item>
+                  <button ion-button block *ngIf="!isSubmit" class="defaultBtn" (click)="applyLeave(leave)" color="dark" type="submit" [disabled]="leave.invalid">Apply</button>
+                  <button ion-button block *ngIf="isSubmit" class="defaultBtn"   color="dark" type="submit" [disabled]="true" >Apply</button>
+                </ion-item>
       </ion-list>
     </form>
   </ion-row>
