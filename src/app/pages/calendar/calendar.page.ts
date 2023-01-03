@@ -2,6 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {UpdateValidatorService} from "../../services/update-validator/update-validator.service";
 import {CalendarComponentOptions, CalendarModule} from "ion2-calendar";
 import {NavParams} from "@ionic/angular";
+import {DesignUtilityService} from "../../services/design-utility.service";
 
 @Component({
   selector: 'app-calendar',
@@ -30,6 +31,7 @@ export class CalendarPage implements OnInit {
   constructor(
     private updatevalidator: UpdateValidatorService,
     public navParams: NavParams,
+    public _designUtils: DesignUtilityService
     // private viewCtrl: ViewController
     // private viewCtrl: ViewController
   ) {
@@ -39,10 +41,12 @@ export class CalendarPage implements OnInit {
   }
 
   onChange($event) {
+    console.log("onChange ....")
     console.log($event);
   }
 
   changeCalender(event, dateRange) {
+    console.log("changeCalender ....")
     console.log(event, dateRange);
   }
 
@@ -50,12 +54,13 @@ export class CalendarPage implements OnInit {
   }
 
   dismiss() {
-    // modal.dismiss()
+    console.log("close the modal....")
+    this.modal.dismiss();
   }
 
   SaveCalenderInfo(data) {
-    console.log("data--", data, "--", this.updatevalidator.getDateFormat(data));
-    // this.viewCtrl.dismiss(data);
-    // this.viewCtrl.dismiss(data);
+    console.log("SaveCalenderInfo data--", data, "--", this.updatevalidator.getDateFormat(data));
+    this._designUtils.publishCalendarData(data);
+    // this.modal.dismiss();
   }
 }
