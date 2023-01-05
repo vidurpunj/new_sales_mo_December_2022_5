@@ -28,15 +28,19 @@ const routes: Routes = [
   },
   {
     path: 'ApplyLeavePage',
-    loadChildren: () => import('./pages/apply-leave-page/apply-leave-page.module').then( m => m.ApplyLeavePagePageModule)
+    loadChildren: () => import('./pages/apply-leave-page/apply-leave-page.module').then(m => m.ApplyLeavePagePageModule)
   },
   {
     path: 'calendar',
-    loadChildren: () => import('./pages/calendar/calendar.module').then( m => m.CalendarPageModule)
+    loadChildren: () => import('./pages/calendar/calendar.module').then(m => m.CalendarPageModule)
   },
   {
     path: 'LeavePage',
-    loadChildren: () => import('./pages/leave/leave.module').then( m => m.LeavePageModule)
+    loadChildren: () => import('./pages/leave/leave.module').then(m => m.LeavePageModule)
+  },
+  {
+    path: 'VisitSummaryPage',
+    loadChildren: () => import('./pages/visit-summary/visit-summary.module').then( m => m.VisitSummaryPageModule)
   }
 ];
 
