@@ -1,0 +1,21 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Visit Summary</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content padding class="scroll-content-web">
+  <div class="es-container">
+    <div class="form-input-web">
+      <ion-label>Select Visit
+        <span class="star">*</span>
+      </ion-label>
+      <ion-item>
+        <ion-select name="expenseType" placeholder="Choose Visit Type" interface="popover" [(ngModel)]="visitTypeId"
+                    (ionChange)="visitTypeChange(visitTypeId)" [disabled]="isMiscVisitEditMode()">
+          <ion-select-option *ngFor="let visitType of VisitTypeList" [value]="visitType.id">{{ visitType.name }}</ion-select-option>
+        </ion-select>
+      </ion-item>
+    </div>
+  </div>
+</ion-content>

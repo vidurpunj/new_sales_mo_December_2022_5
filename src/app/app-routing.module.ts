@@ -40,7 +40,7 @@ const routes: Routes = [
   },
   {
     path: 'VisitSummaryPage',
-    loadChildren: () => import('./pages/visit-summary/visit-summary.module').then( m => m.VisitSummaryPageModule)
+    loadChildren: () => import('./pages/visit-summary-page/visit-summary-page.module').then( m => m.VisitSummaryPagePageModule)
   }
 ];
 

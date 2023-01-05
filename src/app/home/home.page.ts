@@ -453,6 +453,7 @@ export class HomePage implements OnInit {
   }
 
   addVisitSummary() {
+    console.log("Navigate to the vsiste sumamry page ....")
     this.navCtrl.navigateForward('VisitSummaryPage');
   }
 
